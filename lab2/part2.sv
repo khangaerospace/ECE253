@@ -42,34 +42,50 @@ module mux2to1(input logic x, y, s, output logic m);
     logic x_sn;
     logic y_s;
     
-    
-    v7404 inv_s(
+    v7404 not_s(
         .pin1(s), 
         .pin2(s_n),
-        .pin3(), .pin4(),
-        .pin5(), .pin6(),
-        .pin9(), .pin8(),
-        .pin11(), .pin10(),
-        .pin13(), .pin12()
+        .pin3(),
+        .pin4(),
+        .pin5(),
+        .pin6(),
+        .pin9(),
+        .pin8(),
+        .pin11(),
+        .pin10(),
+        .pin13(),
+        .pin12()
     );
     
-    
     v7408 and1(
-        .pin1(x), .pin2(s_n), .pin3(x_sn),
-        .pin4(y), .pin5(s),
-        .pin9(), .pin10(),
-        .pin12(), .pin13(), .pin11(),
-        .pin6(y_s), .pin8()
+        .pin1(x),
+        .pin2(s_n),
+        .pin3(x_sn),
+        .pin4(y),
+        .pin5(s),
+        .pin9(),
+        .pin10(),
+        .pin12(),
+        .pin13(),
+        .pin11(),
+        .pin6(y_s),
+        .pin8()
     );
 
     
-    
     v7432 or1(
-        .pin1(x_sn), .pin2(y_s), .pin3(m),
-        .pin4(), .pin5(),
-        .pin9(), .pin10(),
-        .pin12(), .pin13(), .pin11(),
-        .pin6(), .pin8()
+        .pin1(x_sn),
+        .pin2(y_s),
+        .pin3(m),
+        .pin4(),
+        .pin5(),
+        .pin9(),
+        .pin10(),
+        .pin12(),
+        .pin13(),
+        .pin11(),
+        .pin6(),
+        .pin8()
     );
     
     
