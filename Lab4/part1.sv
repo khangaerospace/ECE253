@@ -1,90 +1,28 @@
 module part1(input logic clock, reset, ParallelLoadn, RotateRight, ASRight, input logic [3:0] Data_IN, output logic [3:0] Q);
-    logic m1_2, m2_3, m3_f1, m4_5, m5_f2, m6_7, m7_f3, m8_9, m9_f4;
-    //Flip Flop 1
-    mux2to1 u1(
-        .MuxSelect(RotateRight),
-        .MuxIn({Q[0], Q[3]}),
-        .Out(m1_2)
-        );
 
-    mux2to1 u2(
-        .MuxSelect(ASRight),
-        .MuxIn({m1_2, Q[3]}),
-        .Out(m2_3)
-        );
+    logic d0_dir, d1_dir, d2_dir, d3_asr, d3_dir;
+    logic d0, d1, d2, d3;
 
-    mux2to1 u3(
-        .MuxSelect(ParallelLoadn),
-        .MuxIn({m2_3, Data_IN[0]}),
-        .Out(m3_f1)
-        );
 
-    flipflop fu1(
-        .Clock(clock),
-        .Reset(reset),
-        .result(m3_f1),
-        .Out(Q[0])
-        );
+    mux2to1 u1(.MuxSelect(RotateRight), .MuxIn({Q[1], Q[3]}), .Out(d0_dir));
+    mux2to1 u3(.MuxSelect(ParallelLoadn), .MuxIn({d0_dir, Data_IN[0]}), .Out(d0));
+    flipflop fu1(.Clock(clock), .Reset(reset), .result(d0), .Out(Q[0]));
 
-    //Flip Flop 2
-    mux2to1 u4(
-        .MuxSelect(RotateRight),
-        .MuxIn({Q[0], Q[1]}),
-        .Out(m4_5)
-        );
+    mux2to1 u4( .MuxSelect(RotateRight), .MuxIn({Q[2], Q[0]}), .Out(d1_dir));
+    mux2to1 u5 (.MuxSelect(ParallelLoadn), .MuxIn({d1_dir, Data_IN[1]}), .Out(d1));
+    flipflop fu2(.Clock(clock), .Reset(reset), .result(d1), .Out(Q[1]) );
 
-    mux2to1 u5(
-        .MuxSelect(ParallelLoadn),
-        .MuxIn({m4_5, Data_IN[1]}),
-        .Out(m5_f2)
-        );
 
-    flipflop fu2(
-        .Clock(clock),
-        .Reset(reset),
-        .result(m5_f2),
-        .Out(Q[1])
-        );
+    mux2to1 u6 (.MuxSelect(RotateRight), .MuxIn({Q[3], Q[1]}), .Out(d2_dir));
+    mux2to1 u7 (.MuxSelect(ParallelLoadn), .MuxIn({d2_dir, Data_IN[2]}), .Out(d2)) ;
+    flipflop fu3(.Clock(clock), .Reset(reset), .result(d2), .Out(Q[2]));
 
-    //Flip Flop 3
-    mux2to1 u6(
-        .MuxSelect(RotateRight),
-        .MuxIn({Q[2], Q[1]}),
-        .Out(m6_7)
-        );
 
-    mux2to1 u7(
-        .MuxSelect(ParallelLoadn),
-        .MuxIn({m6_7, Data_IN[2]}),
-        .Out(m7_f3)
-        );
-
-    flipflop fu3(
-        .Clock(clock),
-        .Reset(reset),
-        .result(m7_f3),
-        .Out(Q[2])
-        );
-
-    //Flip Flop 4
-    mux2to1 u8(
-        .MuxSelect(RotateRight),
-        .MuxIn({Q[2], Q[3]}),
-        .Out(m8_9)
-        );
-
-    mux2to1 u9(
-        .MuxSelect(ParallelLoadn),
-        .MuxIn({m8_9, Data_IN[3]}),
-        .Out(m9_f4)
-        );
-
-    flipflop fu4(
-        .Clock(clock),
-        .Reset(reset),
-        .result(m9_f4),
-        .Out(Q[3])
-        );
+    logic m2_asr;
+    mux2to1 u2(.MuxSelect(ASRight), .MuxIn({Q[3], Q[0]}), .Out(m2_asr));
+    mux2to1 u8(.MuxSelect(RotateRight), .MuxIn({m2_asr, Q[2]}), .Out(d3_dir) );
+    mux2to1 u9(.MuxSelect(ParallelLoadn), .MuxIn({d3_dir, Data_IN[3]}), .Out(d3));
+    flipflop fu4(.Clock(clock), .Reset(reset), .result(d3), .Out(Q[3]));
 
 endmodule
 
@@ -93,9 +31,9 @@ module flipflop(input  logic Clock, input  logic Reset, input  logic result, out
 
     always_ff @(posedge Clock) begin
         if (Reset)
-            out <= 1'b0;
+            Out <= 1'b0;
         else
-            out <= result;
+            Out <= result;
     end
 
 endmodule

@@ -7,7 +7,7 @@ output logic [3:0] CounterValue
 
 logic Enable;
 RateDivider #(.CLOCK_FREQUENCY(CLOCK_FREQUENCY)) u0 (.ClockIn(ClockIn), .Reset(Reset), .Speed(Speed), .Enable(Enable));
-module DisplayCounter u1( .Clock(ClockIn), .Reset(Reset), .EnableDC(Enable), .CounterValue(CounterValue));
+DisplayCounter u1( .Clock(ClockIn), .Reset(Reset), .EnableDC(Enable), .CounterValue(CounterValue));
 
 
 
@@ -23,7 +23,8 @@ module RateDivider #(parameter CLOCK_FREQUENCY = 500)(
     logic [$clog2(CLOCK_FREQUENCY*4)-1:0] counter;
     logic [$clog2(CLOCK_FREQUENCY*4)-1:0] limcount;
 
-    always_comb begin
+    always_comb
+    begin
         case (Speed)
             2'b00: limcount = 1;
             2'b01: limcount = CLOCK_FREQUENCY;
@@ -32,7 +33,8 @@ module RateDivider #(parameter CLOCK_FREQUENCY = 500)(
         endcase
     end
 
-    always_ff @(posedge ClockIn or posedge Reset) begin
+    always_ff @(posedge ClockIn or posedge Reset)
+    begin
         if (Reset)
             counter <= 0;
         else if (counter == limcount - 1)
@@ -54,7 +56,8 @@ module DisplayCounter (
     output logic [3:0] CounterValue
 );
 
-    always_ff @(posedge Clock or posedge Reset) begin
+    always_ff @(posedge Clock or posedge Reset)
+    begin
         if (Reset)
             CounterValue <= 4'b0000; 
         else if (EnableDC)
