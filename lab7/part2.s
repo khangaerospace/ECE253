@@ -1,64 +1,63 @@
 .global _start
+
 _start:
+	la s0, LIST # get the list values
+	lw s1, 0(s0) # get the length of the list
 	
-	la s1, LIST
-	
-	lw s2, 0(s1) # get number of list
-	addi s1, s1, 4 # take the rest of the list
+	addi s0, s0, 4 # get the rest of the list and put in s2
 	
 	addi s3, zero, 1 # swpped variable in MATLAB
+
+WHILE: beqz s3, END
+
+	addi s3, zero, 0 # condition when swapped == 0
 	
-	
-WHILE: beqz s3, END # initiate the while loop and condition when end
-	addi s3, zero, 0 # condition when swapped = 0
-	
-	addi t1, s2, -1 # this is for the inner for loop
+	# load value in
+	addi s4, s0, 0 
+	addi t1, s1, -1 
 	
 	
 FOR: beqz t1, WHILE # compare the the for loop
-	slli a0, s2, 4
-	mv s2, a0 # load the list into t2 so I can go over the linner loop
+	addi a0, s4, 0 
 	jal SWAP
-	addi t7, zero, 1
-	beq a1, t7, FLAG
 	
+	or s3, s3, a0 # see if we finish the for loop
 	
-FLAG:
-	addi s3, zero 1
+	addi s4, s4, 4 # move to the next number
+	addi t1, t1, -1 # subtract 1 in the for loop
+	
+	j FOR
 	
 
 SWAP:
-	addi t2, zero, 0
-	mv t3, a0
+	lw t2, 0(a0)
+	lw t3, 4(a0) 
 	
-	addi t4, 0(t3) # A(i)
-	addi t5, 4(t3) # A(i + 1)
+	bgeu t3, t2, RETURN
 	
-	blt t4, t5, IF
-	j RETURN
-
-IF: 
-	mv t6, 0(t3)
-	mv 0(t3), 4(t3)
-	mv 4(t3), t6
+	sw t3, 0(a0)
+	sw t2, 4(a0)
 	
-	addi t2, zero, 1
-	j RETURN
+	addi a0, zero, 1
 	
+	jr ra
 
 RETURN:
-	mv a0, t3
-	mv a1, t2
+	addi a0, zero, 0
 	jr ra
-	
 	
 	
 
 END: j END
-	
+
 
 
 .global LIST
 .data
 LIST:
     .word 10, 1400, 45, 23, 5, 3, 8, 17, 4, 20, 33
+
+	
+
+	
+	

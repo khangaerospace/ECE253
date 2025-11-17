@@ -32,7 +32,7 @@ SUBROUTINE:
 COUNT:
 	
 	# we modified the provided code to run in sub routine
-	beqz t1, RETURN # Loop until data contains no more 1’s
+	beqz t1, RETURN # Loop until data contains no more 1s
 	srli t2, t1, 1 # Perform SHIFT, followed by AND
 	and t1, t1, t2
 	addi t0, t0, 1 # Count the string lengths so far
