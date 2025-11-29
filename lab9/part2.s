@@ -44,10 +44,10 @@ interrupt_handler:
 
 	csrr t0, mcause # see who cause the interupt
 
-	li t1, 0x80000010       # IRQ16 (timer)
+	li t1, 0x80000010 # IRQ16 (timer)
     beq t0, t1, Timer_ISR
 
-	li t1, 0x80000012       # IRQ18 (keys)
+	li t1, 0x80000012 # IRQ18 (keys)
     beq t0, t1, KEYs_ISR
 
 
@@ -159,7 +159,7 @@ CONFIG_TIMER:
 	li t0, TIMER
 	sw zero, 0(t0)
 
-	# period = 0.25s at 100MHz → 25,000,000 = 0x017D7840
+	# period = 0.25
 	li t1, 0x7840
     sw t1, 8(t0) # low 16 bits
     li t1, 0x017D
